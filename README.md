@@ -6,11 +6,9 @@ npm install
 npm run dev
 Features
 Vue 3 Composition API
-
 Tailwind CSS
 
-Axios for API calls
 
-Credentials
+Akun Login
 Username: admin
 Password: pastibisa
