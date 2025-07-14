@@ -43,3 +43,40 @@ Authenticate user and receive a token.
   "username": "admin",
   "password": "pastibisa"
 }
+```
+
+**Response**:
+
+```json
+{
+  "token": "BearerTokenHere",
+  "user": {
+    "id": 1,
+    "name": "Admin"
+  }
+}
+
+```
+**Error Response**:
+
+```json
+
+{
+  "message": "Invalid credentials"
+}
+```
+
+🔴 POST /api/logout
+Logs the user out and invalidates the token.
+
+**Headers**:
+```bash
+Authorization: Bearer {token}
+```
+**Response**:
+
+```json
+{
+  "message": "Logged out successfully."
+}
+```
