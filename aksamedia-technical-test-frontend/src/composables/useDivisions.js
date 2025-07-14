@@ -1,15 +1,34 @@
-import { computed } from 'vue'
-import { useDivisionStore } from '@/stores/division'
+// composables/useDivisions.js
+import { ref } from 'vue'
+import axios from 'axios'
 
 export function useDivisions() {
-  const divisionStore = useDivisionStore()
+  const divisions = ref([])
+  const loading = ref(false)
+  const error = ref(null)
 
-  const divisions = computed(() => divisionStore.divisions)
-  const loading = computed(() => divisionStore.loading)
-  const error = computed(() => divisionStore.error)
-
-  const fetchDivisions = async (params) => {
-    return await divisionStore.fetchDivisions(params)
+  const fetchDivisions = async (params = {}) => {
+    loading.value = true
+    error.value = null
+    
+    try {
+      const response = await axios.get('/api/divisions', {
+        params: {
+          name: params.name || '',
+          // Remove pagination for simple dropdown usage
+          per_page: 100
+        }
+      })
+      
+      if (response.data.status === 'success') {
+        divisions.value = response.data.data.divisions
+      }
+    } catch (err) {
+      error.value = err.response?.data?.message || 'Failed to fetch divisions'
+      console.error('Error fetching divisions:', err)
+    } finally {
+      loading.value = false
+    }
   }
 
   return {

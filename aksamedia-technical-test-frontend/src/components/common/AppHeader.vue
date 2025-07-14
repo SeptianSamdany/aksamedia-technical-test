@@ -31,10 +31,20 @@ const toggleDropdown = () => {
 const closeDropdown = () => {
   dropdownOpen.value = false
 }
+
+// Get user initials from name
+const getUserInitials = (name) => {
+  if (!name) return 'A'
+  const words = name.split(' ')
+  if (words.length >= 2) {
+    return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase()
+  }
+  return words[0].charAt(0).toUpperCase()
+}
 </script>
 
 <template>
-  <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+  <header class="bg-white border-b border-gray-200 flex-shrink-0 z-30">
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <!-- Left side -->
@@ -42,9 +52,9 @@ const closeDropdown = () => {
           <!-- Mobile menu button -->
           <button
             @click="$emit('toggle-sidebar')"
-            class="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors"
+            class="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none transition-colors"
           >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path 
                 stroke-linecap="round" 
                 stroke-linejoin="round" 
@@ -55,16 +65,16 @@ const closeDropdown = () => {
           </button>
           
           <!-- Title -->
-          <h1 class="ml-4 lg:ml-0 text-xl font-bold text-gray-900">
+          <h1 class="ml-4 lg:ml-0 text-lg font-semibold text-gray-900">
             Employee Management System
           </h1>
         </div>
 
         <!-- Right side -->
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-2">
           <!-- Notifications -->
-          <button class="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
           </button>
@@ -73,16 +83,16 @@ const closeDropdown = () => {
           <div class="relative">
             <button
               @click="toggleDropdown"
-              class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-100 transition-colors focus:outline-none"
             >
-              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
                 <span class="text-white text-sm font-medium">
-                  {{ currentUser?.name?.charAt(0)?.toUpperCase() || 'U' }}
+                  {{ getUserInitials(currentUser?.name) }}
                 </span>
               </div>
               <div class="hidden sm:block text-left">
-                <p class="text-sm font-medium text-gray-900">{{ currentUser?.name || 'User' }}</p>
-                <p class="text-xs text-gray-500">{{ currentUser?.email || 'user@example.com' }}</p>
+                <p class="text-sm font-medium text-gray-900">{{ currentUser?.name || 'Admin' }}</p>
+                <p class="text-xs text-gray-500">{{ currentUser?.username || 'admin' }}</p>
               </div>
               <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -92,26 +102,27 @@ const closeDropdown = () => {
             <!-- Dropdown menu -->
             <div
               v-if="dropdownOpen"
-              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+              class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg border border-gray-200 py-1 focus:outline-none z-50"
               @click.stop
             >
-              <div class="px-4 py-2 border-b border-gray-100">
-                <p class="text-sm font-medium text-gray-900">{{ currentUser?.name || 'User' }}</p>
-                <p class="text-xs text-gray-500">{{ currentUser?.email || 'user@example.com' }}</p>
+              <div class="px-4 py-3 border-b border-gray-100">
+                <p class="text-sm font-medium text-gray-900">{{ currentUser?.name || 'Admin' }}</p>
+                <p class="text-xs text-gray-500">{{ currentUser?.email || currentUser?.username || 'admin' }}</p>
+                <p v-if="currentUser?.phone" class="text-xs text-gray-500 mt-1">{{ currentUser.phone }}</p>
               </div>
               
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                 <div class="flex items-center">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   Profile
                 </div>
               </a>
               
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
                 <div class="flex items-center">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
@@ -119,13 +130,13 @@ const closeDropdown = () => {
                 </div>
               </a>
               
-              <div class="border-t border-gray-100">
+              <div class="border-t border-gray-100 mt-1">
                 <button
                   @click="handleLogout"
-                  class="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50 transition-colors"
+                  class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                 >
                   <div class="flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
                     Logout

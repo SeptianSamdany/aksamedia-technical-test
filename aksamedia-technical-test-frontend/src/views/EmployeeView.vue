@@ -1,3 +1,4 @@
+<!-- EmployeeView.vue -->
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useEmployees } from '@/composables/useEmployees'
@@ -92,36 +93,66 @@ const handleDelete = async (employee) => {
 </script>
 
 <template>
-  <div>
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">Employees</h1>
-      <button
-        @click="openAddModal"
-        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      >
-        Add Employee
-      </button>
-    </div>
-
-    <SearchForm :filters="filters" @search="handleSearch" />
-
-    <div v-if="error" class="rounded-md bg-red-50 p-4 mb-4">
-      <div class="flex">
-        <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800">Error loading employees</h3>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header Section -->
+    <div class="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gray-900 rounded-md flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900">Employees</h1>
+              <p class="text-sm text-gray-500">Manage your team members</p>
+            </div>
+          </div>
+          <button
+            @click="openAddModal"
+            class="inline-flex items-center px-4 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-all duration-200 shadow-sm"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Employee
+          </button>
         </div>
       </div>
     </div>
 
-    <EmployeeList
-      :employees="employees"
-      :pagination="pagination"
-      :loading="loading"
-      @edit="openEditModal"
-      @delete="handleDelete"
-      @page-change="handlePageChange"
-    />
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Search Section -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <SearchForm :filters="filters" @search="handleSearch" />
+      </div>
 
+      <!-- Error Message -->
+      <div v-if="error" class="rounded-lg bg-red-50 border border-red-200 p-4 mb-6">
+        <div class="flex items-center">
+          <svg class="w-5 h-5 text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h3 class="text-sm font-medium text-red-800">Error loading employees</h3>
+        </div>
+      </div>
+
+      <!-- Employee List -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <EmployeeList
+          :employees="employees"
+          :pagination="pagination"
+          :loading="loading"
+          @edit="openEditModal"
+          @delete="handleDelete"
+          @page-change="handlePageChange"
+        />
+      </div>
+    </div>
+
+    <!-- Modal -->
     <EmployeeModal
       v-if="showModal"
       :show="showModal"

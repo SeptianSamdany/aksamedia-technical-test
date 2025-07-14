@@ -1,87 +1,102 @@
+<!-- components/common/PaginationComponent.vue -->
 <script setup>
-defineProps({
-  currentPage: Number,
-  lastPage: Number,
-  perPage: Number,
-  total: Number,
-  from: Number,
-  to: Number
+import { computed } from 'vue'
+
+const props = defineProps({
+  currentPage: {
+    type: Number,
+    default: 1
+  },
+  lastPage: {
+    type: Number,
+    default: 1
+  },
+  total: {
+    type: Number,
+    default: 0
+  },
+  perPage: {
+    type: Number,
+    default: 10
+  },
+  from: {
+    type: Number,
+    default: 0
+  },
+  to: {
+    type: Number,
+    default: 0
+  }
 })
 
 const emit = defineEmits(['page-change'])
 
-const handlePageChange = (page) => {
-  if (page >= 1 && page <= props.lastPage) {
+const pages = computed(() => {
+  const pageNumbers = []
+  const start = Math.max(1, props.currentPage - 2)
+  const end = Math.min(props.lastPage, props.currentPage + 2)
+  
+  for (let i = start; i <= end; i++) {
+    pageNumbers.push(i)
+  }
+  
+  return pageNumbers
+})
+
+const showPrevious = computed(() => props.currentPage > 1)
+const showNext = computed(() => props.currentPage < props.lastPage)
+
+const changePage = (page) => {
+  if (page >= 1 && page <= props.lastPage && page !== props.currentPage) {
     emit('page-change', page)
   }
 }
 </script>
 
 <template>
-  <div class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6">
-    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-      <div>
-        <p class="text-sm text-gray-700">
-          Showing <span class="font-medium">{{ from }}</span> to <span class="font-medium">{{ to }}</span> of
-          <span class="font-medium">{{ total }}</span> results
-        </p>
-      </div>
-      <div>
-        <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-          <button
-            @click="handlePageChange(currentPage - 1)"
-            :disabled="currentPage === 1"
-            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            :class="{ 'cursor-not-allowed opacity-50': currentPage === 1 }"
-          >
-            <span class="sr-only">Previous</span>
-            <svg
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-          <button
-            v-for="page in lastPage"
-            :key="page"
-            @click="handlePageChange(page)"
-            :class="{
-              'z-10 bg-blue-600 text-white focus-visible:outline-offset-2 focus-visible:outline-blue-600': currentPage === page,
-              'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0': currentPage !== page
-            }"
-            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold"
-          >
-            {{ page }}
-          </button>
-          <button
-            @click="handlePageChange(currentPage + 1)"
-            :disabled="currentPage === lastPage"
-            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-            :class="{ 'cursor-not-allowed opacity-50': currentPage === lastPage }"
-          >
-            <span class="sr-only">Next</span>
-            <svg
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l4.5 4.25a.75.75 0 11-1.04 1.08l-3.938-3.71z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-        </nav>
-      </div>
+  <div class="flex items-center justify-between">
+    <!-- Results Info -->
+    <div class="text-sm text-gray-700">
+      Showing {{ from }} to {{ to }} of {{ total }} results
+    </div>
+    
+    <!-- Pagination Controls -->
+    <div class="flex items-center space-x-1">
+      <!-- Previous Button -->
+      <button
+        @click="changePage(currentPage - 1)"
+        :disabled="!showPrevious"
+        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      
+      <!-- Page Numbers -->
+      <template v-for="page in pages" :key="page">
+        <button
+          @click="changePage(page)"
+          class="px-3 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200"
+          :class="{
+            'bg-gray-900 text-white': page === currentPage,
+            'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50': page !== currentPage
+          }"
+        >
+          {{ page }}
+        </button>
+      </template>
+      
+      <!-- Next Button -->
+      <button
+        @click="changePage(currentPage + 1)"
+        :disabled="!showNext"
+        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
     </div>
   </div>
 </template>
