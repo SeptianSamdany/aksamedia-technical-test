@@ -12,6 +12,5 @@ Tailwind CSS
 Axios for API calls
 
 Credentials
-text
 Username: admin
 Password: pastibisa
