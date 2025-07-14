@@ -1,14 +1,11 @@
-# Aksamedia Technical Test
+# 💻 Aksamedia Technical Test
 
-## Project Setup
+This is a frontend project built using **Vue 3 (Composition API)** and **Tailwind CSS** as part of the Aksamedia technical test.
+
+---
+
+## 🚀 Project Setup
+
 ```bash
 npm install
 npm run dev
-Features
-Vue 3 Composition API
-Tailwind CSS
-
-
-Akun Login
-Username: admin
-Password: pastibisa
