@@ -17,8 +17,8 @@ const currentPath = computed(() => route.path)
 
 const menuItems = [
   {
-    name: 'Dashboard',
-    path: '/dashboard',
+    name: 'Divisions',
+    path: '/divisions',
     icon: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v4H8V5z" />
@@ -94,14 +94,14 @@ const handleLinkClick = () => {
     </nav>
 
     <!-- Sidebar Footer -->
-    <div class="p-4 border-t border-gray-100">
+    <div class="p-2 border-t border-gray-200 fixed bottom-0 left-0 w-60 bg-white">
       <div class="flex items-center p-3 rounded-md">
         <div class="w-7 h-7 bg-gray-700 rounded-full flex items-center justify-center">
           <span class="text-white text-sm font-medium">A</span>
         </div>
         <div class="ml-3">
           <p class="text-sm font-medium text-gray-900">Admin</p>
-          <p class="text-xs text-gray-500">Online</p>
+          <p class="text-xs text-gray-500">Administrator</p>
         </div>
       </div>
     </div>

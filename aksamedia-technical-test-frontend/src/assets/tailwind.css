@@ -1,2 +1,64 @@
 @import "tailwindcss";
 
+/* Global styles for notifications */
+#app {
+  position: relative;
+}
+
+/* Ensure notification container is always on top */
+.notification-container {
+  z-index: 9999;
+}
+
+/* Optional: Add some hover effects for better UX */
+.employee-grid-enter-active,
+.employee-grid-leave-active {
+  transition: all 0.3s ease;
+}
+
+.employee-grid-enter-from,
+.employee-grid-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Loading animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.notification-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.notification-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+.notification-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.notification-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.notification-move {
+  transition: transform 0.3s ease;
+}

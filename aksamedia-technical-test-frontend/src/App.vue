@@ -59,28 +59,3 @@ const closeSidebar = () => {
     <RouterView v-else />
   </div>
 </template>
-
-<style scoped>
-/* Custom scrollbar for better UX */
-:deep(*) {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
-}
-
-:deep(*::-webkit-scrollbar) {
-  width: 6px;
-}
-
-:deep(*::-webkit-scrollbar-track) {
-  background: transparent;
-}
-
-:deep(*::-webkit-scrollbar-thumb) {
-  background-color: rgba(156, 163, 175, 0.5);
-  border-radius: 3px;
-}
-
-:deep(*::-webkit-scrollbar-thumb:hover) {
-  background-color: rgba(156, 163, 175, 0.7);
-}
-</style>

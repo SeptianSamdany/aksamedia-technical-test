@@ -1,6 +1,6 @@
-// composables/useDivisions.js
+// composables/useDivisions.js - Fixed Divisions Composable
 import { ref } from 'vue'
-import axios from 'axios'
+import { apiClient } from './useApi'
 
 export function useDivisions() {
   const divisions = ref([])
@@ -12,29 +12,42 @@ export function useDivisions() {
     error.value = null
     
     try {
-      const response = await axios.get('/api/divisions', {
+      const response = await apiClient.get('/divisions', {
         params: {
           name: params.name || '',
-          // Remove pagination for simple dropdown usage
-          per_page: 100
+          per_page: params.per_page || 100 // For dropdown usage
         }
       })
       
       if (response.data.status === 'success') {
         divisions.value = response.data.data.divisions
+        return response.data
       }
     } catch (err) {
       error.value = err.response?.data?.message || 'Failed to fetch divisions'
       console.error('Error fetching divisions:', err)
+      throw err
     } finally {
       loading.value = false
     }
+  }
+
+  const clearError = () => {
+    error.value = null
+  }
+
+  const resetState = () => {
+    divisions.value = []
+    loading.value = false
+    error.value = null
   }
 
   return {
     divisions,
     loading,
     error,
-    fetchDivisions
+    fetchDivisions,
+    clearError,
+    resetState
   }
 }

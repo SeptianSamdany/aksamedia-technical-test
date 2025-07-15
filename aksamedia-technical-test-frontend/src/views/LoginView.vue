@@ -36,7 +36,7 @@ const handleLogin = async () => {
     console.log('Login response:', response)
     
     if (response && response.data) {
-      router.push('/dashboard')
+      router.push('/employees')
     } else {
       throw new Error('Invalid response from server')
     }
